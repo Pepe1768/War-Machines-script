@@ -1,0 +1,133 @@
+_G.HeadSize = 350
+_G.Disabled = true
+
+local Plr = game:GetService("Players").LocalPlayer
+local PlrRoot = Plr.Character:WaitForChild("HumanoidRootPart",100)
+local TimeInterval = 100
+local PlrBackpack = Plr:WaitForChild("Backpack", TimeInterval)
+local PlrGui = Plr:WaitForChild("PlayerGui", TimeInterval)
+local Plrcamera = workspace.CurrentCamera
+local Plrmouse = Plr:GetMouse()
+local Workspace = game:GetService("Workspace")
+local VIM = game:GetService("VirtualInputManager")
+local SuitsSelectionGui = PlrGui:WaitForChild("SuitSelection", TimeInterval)
+local SuitsFrame = SuitsSelectionGui:WaitForChild("Frame", TimeInterval)
+local SuitSelectFrame = SuitsFrame:WaitForChild("SuitSelection", TimeInterval)
+local UsingSuitWarning = SuitSelectFrame:WaitForChild("UsingSuitWarning", TimeInterval)
+local EntitiesFolder = Workspace:WaitForChild("Entities",100)
+print("Got Variables")
+-----------------------------------------------
+local function TeleportToRandomMission()
+    local MissionFolder = Workspace:WaitForChild("Missions",100)
+	for _,MissionLocation in pairs(MissionFolder:GetChildren()) do
+		if MissionLocation:IsA("Model") and MissionLocation ~= nil then
+            local MissionName = MissionLocation.Name
+			for _,MissionSmoke in pairs(MissionLocation:GetChildren()) do
+				if MissionSmoke:IsA("Model") then
+					local MissionCFrame = MissionSmoke:WaitForChild("SmokePart",100)
+                    PlrRoot.CFrame = MissionCFrame.CFrame
+                end
+            end
+        end
+    end
+end
+-----------------------------------------------
+local function CollectMoney()
+for _,Money in pairs(EntitiesFolder:GetChildren()) do
+   if Money:IsA("MeshPart") and Money ~= nil and Money.Name == "MoneyBag" and Money.Transparency == 0 then
+      PlrRoot.CFrame = Money.CFrame
+   end
+end
+end
+-----------------------------------------------
+local function EquipSuit()
+local Suitcase = PlrBackpack:FindFirstChild("Suitcase") or Plr.Character:FindFirstChild("Suitcase")
+    if Suitcase ~= nil and Suitcase:IsA("Tool") then
+        print(UsingSuitWarning.Visible)
+        local newSuitScrollFrame = SuitSelectFrame:WaitForChild("ScrollingFrame", TimeInterval)
+        local newSuitFreeSide = newSuitScrollFrame:WaitForChild("T1", TimeInterval)
+        local newSuitFrame = newSuitFreeSide:WaitForChild("SuitFrame", TimeInterval)
+        local SteelSuit = newSuitFrame:WaitForChild("Steel")
+        firesignal(SteelSuit.MouseButton1Click)
+    end
+    wait(1)
+end
+
+-----------------------------------------------
+local function EquipRepulsor()
+local Repulsor = PlrBackpack:FindFirstChild("Repulsor") or Plr.Character:FindFirstChild("Repulsor")
+    if Repulsor ~= nil and Repulsor:IsA("Tool") then
+        Repulsor.Parent = Plr.Character
+    end
+end
+
+-----------------------------------------------
+local function AutoFarm()
+local MissionFolder = Workspace:WaitForChild("Missions",100)
+	for _,MissionLocation in pairs(MissionFolder:GetChildren()) do
+		if MissionLocation:IsA("Model") and MissionLocation ~= nil then
+            local MissionName = MissionLocation.Name
+			for _,MissionSmoke in pairs(MissionLocation:GetChildren()) do
+				if MissionSmoke:IsA("Model") then
+					local MissionCFrame = MissionSmoke:WaitForChild("SmokePart",100)
+                    if _G.Disabled then
+Plr.GameplayPaused = false
+    if MissionLocation ~= nil then
+	for _,npcpart in pairs(MissionLocation:WaitForChild("AISpawners",100):GetChildren()) do
+		for _,npc in pairs(npcpart:GetChildren()) do
+			if npc ~= nil and npc:IsA("Model") then
+                if npc:FindFirstChild("Humanoid") ~= nil then
+					if npc:FindFirstChild("Humanoid").Health >= 1 then
+						if npc:FindFirstChild("UpperTorso") ~= nil then
+							npc:FindFirstChild("UpperTorso").Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+							npc:FindFirstChild("UpperTorso").Transparency = 0.85
+							npc:FindFirstChild("UpperTorso").BrickColor = BrickColor.new("Really black")
+							npc:FindFirstChild("UpperTorso").Material = "Neon"
+							npc:FindFirstChild("UpperTorso").CanCollide = false
+                            
+                            PlrRoot.CFrame = npc:FindFirstChild("UpperTorso").CFrame + Vector3.new(0,200,0)
+                            
+                            local screenPosition: Vector3, inView: boolean = Plrcamera:WorldToScreenPoint(npc:FindFirstChild("UpperTorso").Position)
+                            local screenVector: Vector2 = Vector2.new(screenPosition.X, screenPosition.Y)
+                            local lookVector = (npc:FindFirstChild("UpperTorso").Position - Plrcamera.CFrame.Position).Unit
+                            local newLookCFrame = CFrame.lookAt(Plrcamera.CFrame.Position, Plrcamera.CFrame.Position + lookVector)
+                            local X,Y = screenVector.X,screenVector.Y
+                            Plrcamera.CFrame = newLookCFrame
+                            EquipRepulsor()
+                            VIM:SendMouseButtonEvent(X,Y,0,true, game, 1.8)
+                            VIM:SendMouseButtonEvent(X,Y,0,false, game, 1.8)
+                        end
+                    
+					elseif npc:FindFirstChild("Humanoid") ~= nil and npc:FindFirstChild("Humanoid").Health <= 1 then
+						if npc:FindFirstChild("UpperTorso") ~= nil then
+							npc:FindFirstChild("UpperTorso"):Destroy()
+                        end
+                    end
+                elseif MissionInstance == nil or npc.Parent.Parent.Parent == nil or npc.Parent.Parent == nil then
+                print("Done")
+                end
+            end
+        end
+    end
+end
+                end
+            end
+        end
+    end
+end
+end
+-----------------------------------------------
+
+
+print("Finished All Functions")
+
+warn("Loop Enabled")
+
+EquipSuit()
+wait(2)
+TeleportToRandomMission()
+while wait() do
+    EquipSuit()
+    AutoFarm()
+    CollectMoney()
+end
