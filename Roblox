@@ -62,6 +62,13 @@ local Repulsor = PlrBackpack:FindFirstChild("Repulsor") or Plr.Character:FindFir
 end
 
 -----------------------------------------------
+local function UnequipRepulsor()
+local Repulsor = PlrBackpack:FindFirstChild("Repulsor") or Plr.Character:FindFirstChild("Repulsor")
+    if Repulsor ~= nil and Repulsor:IsA("Tool") then
+        Repulsor.Parent = PlrBackpack
+    end
+end
+-----------------------------------------------
 local function AutoFarm()
 local MissionFolder = Workspace:WaitForChild("Missions",100)
 	for _,MissionLocation in pairs(MissionFolder:GetChildren()) do
@@ -103,7 +110,9 @@ Plr.GameplayPaused = false
 							npc:FindFirstChild("UpperTorso"):Destroy()
                         end
                     end
-                elseif MissionInstance == nil or npc.Parent.Parent.Parent == nil or npc.Parent.Parent == nil then
+                end
+            end
+                if npc.Parent.Parent.Parent == nil or npc.Parent.Parent == nil then
                 print("Done")
                 end
             end
@@ -115,7 +124,6 @@ end
         end
     end
 end
-end
 -----------------------------------------------
 
 
@@ -124,7 +132,7 @@ print("Finished All Functions")
 warn("Loop Enabled")
 
 EquipSuit()
-wait(2)
+wait(4)
 TeleportToRandomMission()
 while wait() do
     EquipSuit()
